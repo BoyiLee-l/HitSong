@@ -7,7 +7,9 @@
 //
 
 import UIKit
+import Network
 
+@available(iOS 12.0, *)
 class SearchHomeVC: UIViewController {
     
     @IBOutlet weak var myTableView: UITableView!
@@ -18,7 +20,7 @@ class SearchHomeVC: UIViewController {
     var filterArray: [Item] = []
     var isShowSearchResult: Bool = false // 是否顯示搜尋的結果
     var searchController: UISearchController!
-    
+    let monitor = NWPathMonitor()
     var spinner: UIActivityIndicatorView = {
         let activityView = UIActivityIndicatorView()
         activityView.style = .white
@@ -27,7 +29,7 @@ class SearchHomeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        requestData()
+        checkNetwork()
         tableSet()
         searchSet()
         
@@ -35,7 +37,7 @@ class SearchHomeVC: UIViewController {
     
     func requestData(){
         print("Categories:\(categoriesURL)")
-        startLoading()
+        //startLoading()
         results.getCategories(baseurl: categoriesURL) { (data) in
             self.spotifyData = data
             //self.searchFilter()
@@ -45,23 +47,39 @@ class SearchHomeVC: UIViewController {
         }
     }
     
-//    func searchFilter()->([CategoriesItem]){
-//        guard let datas = spotifyData?.categories?.items else{ fatalError() }
-//
-//        for data in datas{
-//            let hrefURl = searchFilterURL(id: data.id)
-//            results.getSpotifyData(baseurl: hrefURl) { (PlaylistsData) in
-//                PlaylistsData.playlists?.items?.filter({ ($0 != nil)})
-//
-//            }
-//        }
-//        return datas
-//    }
-//
-//    func searchFilterURL(id: String) -> String{
-//        return  "https://api.spotify.com/v1/browse/categories/\(id)/playlists"
-//    }
-    
+    func checkNetwork(){
+        monitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                print("connected")
+                self.requestData()
+            } else {
+                print("no connection")
+                DispatchQueue.main.async {
+                       let controller = UIAlertController(title: "網路異常", message: "請檢查網路相關設定", preferredStyle: .alert)
+                       let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                       controller.addAction(okAction)
+                       self.present(controller, animated: true, completion: nil)
+                }
+            }
+        }
+        monitor.start(queue: DispatchQueue.global())
+    }
+    //    func searchFilter()->([CategoriesItem]){
+    //        guard let datas = spotifyData?.categories?.items else{ fatalError() }
+    //
+    //        for data in datas{
+    //            let hrefURl = searchFilterURL(id: data.id)
+    //            results.getSpotifyData(baseurl: hrefURl) { (PlaylistsData) in
+    //                PlaylistsData.playlists?.items?.filter({ ($0 != nil)})
+    //
+    //            }
+    //        }
+    //        return datas
+    //    }
+    //
+    //    func searchFilterURL(id: String) -> String{
+    //        return  "https://api.spotify.com/v1/browse/categories/\(id)/playlists"
+    //    }
     
     func tableSet(){
         myTableView.delegate = self
@@ -112,6 +130,7 @@ class SearchHomeVC: UIViewController {
     }
 }
 
+@available(iOS 12.0, *)
 extension SearchHomeVC: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -161,6 +180,7 @@ extension SearchHomeVC: UITableViewDelegate,UITableViewDataSource{
             next.titleName = "\(data.name)"
             next.detailData = .他類清單
             self.navigationController?.pushViewController(next, animated: true)
+            
         }
     }
     
@@ -169,6 +189,7 @@ extension SearchHomeVC: UITableViewDelegate,UITableViewDataSource{
     }
 }
 
+@available(iOS 12.0, *)
 extension SearchHomeVC: UISearchBarDelegate{
     
     // 點擊searchBar的搜尋按鈕時
@@ -184,7 +205,7 @@ extension SearchHomeVC: UISearchBarDelegate{
             //print(self.searchData)
             guard let newData = data.tracks.items else { return }
             self.searchData = newData.filter({($0.previewUrl != nil) })
-//            self.navigationItem.title = "搜尋列表"
+            //            self.navigationItem.title = "搜尋列表"
             self.stopLoading()
             self.myTableView.reloadData()
         }
@@ -200,6 +221,7 @@ extension SearchHomeVC: UISearchBarDelegate{
     
 }
 
+@available(iOS 12.0, *)
 extension SearchHomeVC: UISearchResultsUpdating{
     
     func updateSearchResults(for searchController: UISearchController) {

@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import Kingfisher
+import Network
 
 enum DetailData {
     case 熱門清單
@@ -16,6 +17,7 @@ enum DetailData {
     case 搜尋清單
 }
 
+@available(iOS 12.0, *)
 class HomeVC: UIViewController {
     
     @IBOutlet weak var myCollection: UICollectionView!
@@ -26,6 +28,8 @@ class HomeVC: UIViewController {
     
     var results = GetspotifyData()
     var spotifyData: PlaylistsData?
+    
+    let monitor = NWPathMonitor()
     var spinner: UIActivityIndicatorView = {
         let activityView = UIActivityIndicatorView()
         activityView.style = .white
@@ -36,7 +40,7 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print(hrefURl)
-        requestData()
+        checkNetwork()
         setCollectionView()
         setupActivityView()
     }
@@ -53,7 +57,7 @@ class HomeVC: UIViewController {
     }
     
     func requestData(){
-        startLoading()
+        //startLoading()
         switch detailData{
         case.熱門清單:
             results.getSpotifyData(baseurl: baseURL) { (data) in
@@ -74,6 +78,24 @@ class HomeVC: UIViewController {
         }
     }
     
+    func checkNetwork(){
+        monitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                print("connected")
+                self.requestData()
+            } else {
+                print("no connection")
+                DispatchQueue.main.async {
+                       let controller = UIAlertController(title: "網路異常", message: "請檢查網路相關設定", preferredStyle: .alert)
+                       let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                       controller.addAction(okAction)
+                       self.present(controller, animated: true, completion: nil)
+                }
+            }
+        }
+        monitor.start(queue: DispatchQueue.global())
+    }
+    
     func setupActivityView(){
         view.addSubview(spinner)
         spinner.center = view.center
@@ -91,6 +113,7 @@ class HomeVC: UIViewController {
     
 }
 
+@available(iOS 12.0, *)
 extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
