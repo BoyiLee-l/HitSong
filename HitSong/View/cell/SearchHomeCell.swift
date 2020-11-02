@@ -18,6 +18,8 @@ class SearchHomeCell: UITableViewCell {
         super.awakeFromNib()
         myLabel.font = UIFont(name: "Title 1", size: 22)
         nameLabel.font = UIFont(name: "Title 1", size: 18)
+        myLabel.textColor = .white
+        nameLabel.textColor = .white
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

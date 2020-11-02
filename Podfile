@@ -9,4 +9,10 @@ target 'HitSong' do
   pod 'Alamofire'
   pod 'SwiftyJSON', '~> 4.0'
   pod 'Kingfisher'
+  pod 'SVProgressHUD'
+  pod 'SCLAlertView'
+  pod 'MarqueeLabel'
+  pod 'NVActivityIndicatorView'
+  pod 'SnapKit'
+  pod 'SwiftMessages'
 end

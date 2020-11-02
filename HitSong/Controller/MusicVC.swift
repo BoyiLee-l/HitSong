@@ -38,24 +38,12 @@ class MusicVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         playMusic()
-        UIViewSet()
+        setBackground(color1: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), color2: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), color3: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         removePeriodicTimeObserver()
-    }
-    
-    func UIViewSet(){
-        // UI design
-        let colour1 = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor
-        let colour2 = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1).cgColor
-        let colour3 = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-        let gradient = CAGradientLayer()
-        gradient.frame = view.bounds
-        gradient.colors = [colour1,colour2, colour3]
-        gradient.locations = [0.2, 0.5,1]
-        
-        view.layer.insertSublayer(gradient, at: 0)
     }
     
     func setPlayerContent(){

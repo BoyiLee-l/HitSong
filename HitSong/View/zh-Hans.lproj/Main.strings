@@ -1,0 +1,39 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "2hV-K2-AQG"; */
+"2hV-K2-AQG.text" = "Label";
+
+/* Class = "UITabBarItem"; title = "首頁"; ObjectID = "5WF-iV-Akm"; */
+"5WF-iV-Akm.title" = "首頁";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "BSR-6K-fUD"; */
+"BSR-6K-fUD.text" = "Label";
+
+/* Class = "UILabel"; text = "Tyler, The Creator"; ObjectID = "C8x-Hw-I9y"; */
+"C8x-Hw-I9y.text" = "Tyler, The Creator";
+
+/* Class = "UITabBarItem"; title = "搜尋"; ObjectID = "GGb-Hu-NYl"; */
+"GGb-Hu-NYl.title" = "搜尋";
+
+/* Class = "UILabel"; text = "-0:00"; ObjectID = "KGG-ju-OE7"; */
+"KGG-ju-OE7.text" = "-0:00";
+
+/* Class = "UILabel"; text = "歌曲:"; ObjectID = "OZG-2l-ZrC"; */
+"OZG-2l-ZrC.text" = "歌曲:";
+
+/* Class = "UILabel"; text = "Garden Shed"; ObjectID = "Pxy-Ri-9NK"; */
+"Pxy-Ri-9NK.text" = "Garden Shed";
+
+/* Class = "UILabel"; text = "專輯:"; ObjectID = "cil-YG-e1l"; */
+"cil-YG-e1l.text" = "專輯:";
+
+/* Class = "UILabel"; text = "藝人:"; ObjectID = "eZZ-Ma-Zby"; */
+"eZZ-Ma-Zby.text" = "藝人:";
+
+/* Class = "UILabel"; text = "0:00"; ObjectID = "fqF-zn-3Mo"; */
+"fqF-zn-3Mo.text" = "0:00";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "mkE-vv-8LS"; */
+"mkE-vv-8LS.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "tux-jH-EJL"; */
+"tux-jH-EJL.text" = "Label";

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE3985DB254A6A1600F1FB72 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3985DA254A6A1600F1FB72 /* UIViewController.swift */; };
 		CE923D0324EFB7A200D4DE00 /* MusicVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE923D0224EFB7A200D4DE00 /* MusicVC.swift */; };
 		CE9F09E824F4D764006B46D2 /* SearchHomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9F09E724F4D764006B46D2 /* SearchHomeCell.swift */; };
 		CE9F09EC24F786A2006B46D2 /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9F09EB24F786A2006B46D2 /* TabbarController.swift */; };
@@ -29,6 +30,7 @@
 		491238D4C511F00CEC649E9F /* Pods-HitSong.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HitSong.release.xcconfig"; path = "Target Support Files/Pods-HitSong/Pods-HitSong.release.xcconfig"; sourceTree = "<group>"; };
 		65B304DF42A38BAF1068DB2B /* Pods_HitSong.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HitSong.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55C02D40C9C67361E02E282 /* Pods-HitSong.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HitSong.debug.xcconfig"; path = "Target Support Files/Pods-HitSong/Pods-HitSong.debug.xcconfig"; sourceTree = "<group>"; };
+		CE3985DA254A6A1600F1FB72 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		CE923D0224EFB7A200D4DE00 /* MusicVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicVC.swift; sourceTree = "<group>"; };
 		CE9F09E724F4D764006B46D2 /* SearchHomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHomeCell.swift; sourceTree = "<group>"; };
 		CE9F09EB24F786A2006B46D2 /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
@@ -46,6 +48,10 @@
 		CEDD4B4124EE200600E4B629 /* HomeCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionCell.swift; sourceTree = "<group>"; };
 		CEDD4B4724EE45F900E4B629 /* TracksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksVC.swift; sourceTree = "<group>"; };
 		CEDD4B4B24EF615000E4B629 /* TracksTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksTableCell.swift; sourceTree = "<group>"; };
+		CEE08F1524F89FF100684284 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		CEE08F1624F89FF100684284 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		CEE08F1724F89FF600684284 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
+		CEE08F1824F89FF600684284 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +83,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CE3985D9254A69A900F1FB72 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CE3985DA254A6A1600F1FB72 /* UIViewController.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		CEDD4B1224EBDB5E00E4B629 = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +112,7 @@
 		CEDD4B1D24EBDB5E00E4B629 /* HitSong */ = {
 			isa = PBXGroup;
 			children = (
+				CE3985D9254A69A900F1FB72 /* Extensions */,
 				CEDD4B3B24ECCB3300E4B629 /* Service */,
 				CEDD4B3424EBDB8800E4B629 /* Model */,
 				CEDD4B3C24EE14CF00E4B629 /* View */,
@@ -210,6 +225,8 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = CEDD4B1224EBDB5E00E4B629;
 			productRefGroup = CEDD4B1C24EBDB5E00E4B629 /* Products */;
@@ -288,6 +305,7 @@
 				CEDD4B1F24EBDB5E00E4B629 /* AppDelegate.swift in Sources */,
 				CEDD4B2124EBDB5E00E4B629 /* SceneDelegate.swift in Sources */,
 				CE923D0324EFB7A200D4DE00 /* MusicVC.swift in Sources */,
+				CE3985DB254A6A1600F1FB72 /* UIViewController.swift in Sources */,
 				CEDD4B4824EE45F900E4B629 /* TracksVC.swift in Sources */,
 				CEDD4B4224EE200600E4B629 /* HomeCollectionCell.swift in Sources */,
 				CE9F09E824F4D764006B46D2 /* SearchHomeCell.swift in Sources */,
@@ -303,6 +321,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				CEDD4B2524EBDB5E00E4B629 /* Base */,
+				CEE08F1524F89FF100684284 /* zh-Hans */,
+				CEE08F1724F89FF600684284 /* zh-Hant */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -311,6 +331,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				CEDD4B2A24EBDB6000E4B629 /* Base */,
+				CEE08F1624F89FF100684284 /* zh-Hans */,
+				CEE08F1824F89FF600684284 /* zh-Hant */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -322,6 +344,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -382,6 +405,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -438,14 +462,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = WCPF3NB7XM;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KRP9WKBN97;
 				INFOPLIST_FILE = /Users/user/Desktop/git/hitsong/HitSong/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fun.HitSong;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pedro.HitSong;
 				PRODUCT_NAME = "酷玩瘋樂榜";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -458,14 +482,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = WCPF3NB7XM;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KRP9WKBN97;
 				INFOPLIST_FILE = /Users/user/Desktop/git/hitsong/HitSong/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fun.HitSong;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pedro.HitSong;
 				PRODUCT_NAME = "酷玩瘋樂榜";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

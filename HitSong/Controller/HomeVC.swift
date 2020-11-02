@@ -30,24 +30,21 @@ class HomeVC: UIViewController {
     var spotifyData: PlaylistsData?
     
     let monitor = NWPathMonitor()
-    var spinner: UIActivityIndicatorView = {
-        let activityView = UIActivityIndicatorView()
-        activityView.style = .white
-        return activityView
-    }()
-    
-    
+  
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         print(hrefURl)
         checkNetwork()
         setCollectionView()
         setupActivityView()
+        setBackground(color1: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), color2: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
     }
     
     func setCollectionView() {
         myCollection.delegate = self
         myCollection.dataSource = self
+        myCollection.backgroundColor = .clear
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -86,32 +83,20 @@ class HomeVC: UIViewController {
             } else {
                 print("no connection")
                 DispatchQueue.main.async {
-                       let controller = UIAlertController(title: "網路異常", message: "請檢查網路相關設定", preferredStyle: .alert)
-                       let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                       controller.addAction(okAction)
-                       self.present(controller, animated: true, completion: nil)
+                    let controller = UIAlertController(title: "網路異常", message: "請檢查網路相關設定", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    controller.addAction(okAction)
+                    self.present(controller, animated: true, completion: nil)
                 }
             }
         }
         monitor.start(queue: DispatchQueue.global())
     }
     
-    func setupActivityView(){
-        view.addSubview(spinner)
-        spinner.center = view.center
-    }
     
-    func startLoading(){
-        spinner.startAnimating()
-        spinner.isHidden = false
-    }
-    
-    func stopLoading(){
-        spinner.stopAnimating()
-        spinner.isHidden = true
-    }
     
 }
+
 
 @available(iOS 12.0, *)
 extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource{

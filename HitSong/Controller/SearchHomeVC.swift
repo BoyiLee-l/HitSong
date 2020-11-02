@@ -21,18 +21,13 @@ class SearchHomeVC: UIViewController {
     var isShowSearchResult: Bool = false // 是否顯示搜尋的結果
     var searchController: UISearchController!
     let monitor = NWPathMonitor()
-    var spinner: UIActivityIndicatorView = {
-        let activityView = UIActivityIndicatorView()
-        activityView.style = .white
-        return activityView
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         checkNetwork()
         tableSet()
         searchSet()
-        
+        setBackground(color1: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), color2: #colorLiteral(red: 0.7451151609, green: 0.7450172305, blue: 0.7536247373, alpha: 1), color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
     }
     
     func requestData(){
@@ -84,23 +79,17 @@ class SearchHomeVC: UIViewController {
     func tableSet(){
         myTableView.delegate = self
         myTableView.dataSource = self
-        
         myTableView.separatorStyle = .singleLine
         myTableView.separatorColor = UIColor(named: "DarkGreen")
-        
-        let colour1 = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1).cgColor
-        let colour2 = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-        let gradient = CAGradientLayer()
-        gradient.frame = view.frame
-        gradient.colors = [colour2, colour1]
-        gradient.locations = [ 0.4,0.8]
-        view.layer.insertSublayer(gradient, at: 0)
+    
     }
     
     func searchSet(){
         // 生成SearchController
         self.searchController = UISearchController(searchResultsController: nil)
         self.searchController.searchBar.tintColor = .white
+        self.searchController.searchBar.barTintColor = .black
+        //self.searchController.searchBar.backgroundColor = .black
         self.searchController.searchBar.placeholder = "藝人,歌曲或專輯"
         self.searchController.searchBar.sizeToFit()
         self.searchController.searchResultsUpdater = self // 設定代理UISearchResultsUpdating的協議
@@ -110,20 +99,7 @@ class SearchHomeVC: UIViewController {
         self.myTableView.tableHeaderView = self.searchController.searchBar
     }
     
-    func setupActivityView(){
-        view.addSubview(spinner)
-        spinner.center = view.center
-    }
-    
-    func startLoading(){
-        spinner.startAnimating()
-        spinner.isHidden = false
-    }
-    
-    func stopLoading(){
-        spinner.stopAnimating()
-        spinner.isHidden = true
-    }
+ 
     
     func gatSearchURl(value: String) -> String{
         return  "https://api.spotify.com/v1/search?q=\(value)&type=track&limit=50"

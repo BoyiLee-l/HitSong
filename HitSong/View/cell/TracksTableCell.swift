@@ -14,7 +14,7 @@ class TracksTableCell: UITableViewCell {
     @IBOutlet weak var albumName: UILabel!
     @IBOutlet weak var songName: UILabel!
     @IBOutlet weak var artistsName: UILabel!
-    @IBOutlet weak var playBtn: UIButton!
+   
     
     weak var delegate: TracksDelegate?
     var musicUrl: String = ""
@@ -24,6 +24,10 @@ class TracksTableCell: UITableViewCell {
         albumName.font =  UIFont(name: "Title 1", size: 14)
         songName.font = UIFont(name: "Title 2", size: 14)
         artistsName.font = UIFont(name: "Title 1", size: 14)
+        
+        albumName.textColor = .white
+        songName.textColor = .white
+        artistsName.textColor = .white
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -32,12 +36,6 @@ class TracksTableCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    @IBAction func playMusic(_ sender: UIButton) {
-        print(musicUrl)
-        if let url = URL(string: musicUrl){
-            delegate?.playMusic(url: url)
-        }
-    }
     
 }
 

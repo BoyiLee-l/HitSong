@@ -11,12 +11,6 @@ import UIKit
 class TracksVC: UIViewController {
     
     @IBOutlet weak var myTableView: UITableView!
-    
-    var spinner: UIActivityIndicatorView = {
-        let activityView = UIActivityIndicatorView()
-        activityView.style = .white
-        return activityView
-    }()
     var urls = ""
     var results = GetspotifyData()
     var musucData: [Item2] = []
@@ -27,6 +21,14 @@ class TracksVC: UIViewController {
         requestData()
         tableSet()
         setupActivityView()
+        setBackground(color1: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), color2: #colorLiteral(red: 0.7451151609, green: 0.7450172305, blue: 0.7536247373, alpha: 1), color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+    }
+    
+    func tableSet(){
+        myTableView.delegate = self
+        myTableView.dataSource = self
+        myTableView.separatorStyle = .singleLine
+        myTableView.separatorColor = UIColor(named: "DarkGreen")
     }
     
     func requestData(){
@@ -39,37 +41,6 @@ class TracksVC: UIViewController {
             self.stopLoading()
             self.myTableView.reloadData()
         }
-    }
-    
-    func tableSet(){
-        myTableView.delegate = self
-        myTableView.dataSource = self
-        myTableView.separatorStyle = .singleLine
-        myTableView.separatorColor = UIColor(named: "DarkGreen")
-        // UI design
-        //let colour1 = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor
-        let colour1 = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1).cgColor
-        let colour2 = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).cgColor
-        let gradient = CAGradientLayer()
-        gradient.frame = view.frame
-        gradient.colors = [colour2, colour1]
-        gradient.locations = [ 0.4,0.8]
-        view.layer.insertSublayer(gradient, at: 0)
-    }
-    
-    func setupActivityView(){
-        view.addSubview(spinner)
-        spinner.center = view.center
-    }
-    
-    func startLoading(){
-        spinner.startAnimating()
-        spinner.isHidden = false
-    }
-    
-    func stopLoading(){
-        spinner.stopAnimating()
-        spinner.isHidden = true
     }
     
     
