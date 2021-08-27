@@ -39,6 +39,6 @@ class TracksTableCell: UITableViewCell {
     
 }
 
-protocol TracksDelegate: class {
+protocol TracksDelegate: AnyObject {
     func playMusic(url: URL)
 }
