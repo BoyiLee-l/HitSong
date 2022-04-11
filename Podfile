@@ -7,13 +7,9 @@ target 'MusicPlayer' do
 
   # Pods for MusicPlayer
   pod 'Alamofire'
-  pod 'SwiftyJSON', '~> 4.0'
   pod 'Kingfisher'
-  pod 'SVProgressHUD'
-  pod 'SCLAlertView'
-  pod 'MarqueeLabel'
   pod 'NVActivityIndicatorView'
   pod 'SnapKit'
-  pod 'SwiftMessages'
+  pod 'SwiftyJSON'
   pod 'RealmSwift', '4.4.0'
 end

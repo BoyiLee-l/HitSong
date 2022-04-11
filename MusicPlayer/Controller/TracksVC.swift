@@ -21,7 +21,9 @@ class TracksVC: UIViewController {
         requestData()
         tableSet()
         setupActivityView()
-        setBackground(color1: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), color2: #colorLiteral(red: 0.7451151609, green: 0.7450172305, blue: 0.7536247373, alpha: 1), color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+        setBackgroundColor(color1: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                      color2: #colorLiteral(red: 0.7451151609, green: 0.7450172305, blue: 0.7536247373, alpha: 1),
+                      color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
     }
     
     func tableSet(){
@@ -62,14 +64,22 @@ extension TracksVC: UITableViewDelegate, UITableViewDataSource{
         return cell
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "detail"{
-            let next = segue.destination as! MusicVC
-            guard let row = myTableView.indexPathForSelectedRow?.row else { return  }
-            next.musucData = self.musucData
-            next.songIndex = row
-        }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let next = self.storyboard?.instantiateViewController(withIdentifier: "MusicVC") as! MusicVC
+        guard let row = myTableView.indexPathForSelectedRow?.row else { return }
+        next.musucData = self.musucData
+        next.songIndex = row
+        self.present(next, animated: true, completion: nil)
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "detail"{
+//            let next = segue.destination as! MusicVC
+//            guard let row = myTableView.indexPathForSelectedRow?.row else { return  }
+//            next.musucData = self.musucData
+//            next.songIndex = row
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120

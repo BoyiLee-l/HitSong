@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="m6X-j8-Hct">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="m6X-j8-Hct">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
@@ -25,7 +25,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="100" id="tjr-Lq-Fs9" customClass="SearchHomeCell" customModule="酷玩瘋樂榜" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="100"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tjr-Lq-Fs9" id="gfB-eX-l6T">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
@@ -172,7 +172,7 @@
                                 <color key="separatorColor" name="DarkGreen"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="120" id="s1T-Du-n7P" customClass="TracksTableCell" customModule="酷玩瘋樂榜" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="120"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="s1T-Du-n7P" id="gQ1-3V-vfP">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="120"/>
@@ -271,7 +271,6 @@
                                             <outlet property="artistsName" destination="mkE-vv-8LS" id="1hX-Lp-cEw"/>
                                             <outlet property="myImage" destination="RIM-3M-pgw" id="Lss-a0-FWT"/>
                                             <outlet property="songName" destination="2hV-K2-AQG" id="0zK-Fl-FgN"/>
-                                            <segue destination="2vk-3y-Fz7" kind="show" identifier="detail" id="x5F-gM-gfl"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -343,7 +342,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="iBZ-YW-TgB">
-                                <rect key="frame" x="32" y="120" width="350" height="744"/>
+                                <rect key="frame" x="32" y="76" width="350" height="788"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DMJ-yL-GhQ">
                                         <rect key="frame" x="0.0" y="0.0" width="350" height="350"/>
@@ -352,7 +351,7 @@
                                         </constraints>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="8ra-rk-r7i">
-                                        <rect key="frame" x="0.0" y="365" width="350" height="379"/>
+                                        <rect key="frame" x="0.0" y="365" width="350" height="423"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Twn-7j-znZ">
                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="20"/>
@@ -389,7 +388,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="80" translatesAutoresizingMaskIntoConstraints="NO" id="WMd-RS-ULw">
-                                                <rect key="frame" x="29" y="75.5" width="292.5" height="50"/>
+                                                <rect key="frame" x="29" y="86.5" width="292.5" height="50"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="8YF-Ao-Cyz" userLabel="SongInfoSV">
                                                         <rect key="frame" x="0.0" y="0.0" width="180.5" height="50"/>
@@ -428,7 +427,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="vV6-NU-b4a" userLabel="PlaySV">
-                                                <rect key="frame" x="0.0" y="181" width="350" height="38"/>
+                                                <rect key="frame" x="0.0" y="203" width="350" height="38"/>
                                                 <subviews>
                                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kmQ-uL-Hod">
                                                         <rect key="frame" x="0.0" y="0.0" width="32" height="38"/>
@@ -467,7 +466,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="DLg-ag-zJ1" userLabel="SoundBarSV">
-                                                <rect key="frame" x="0.0" y="274.5" width="350" height="22"/>
+                                                <rect key="frame" x="0.0" y="307.5" width="350" height="22"/>
                                                 <subviews>
                                                     <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVb-Sm-J7d" userLabel="VolumeDown Button">
                                                         <rect key="frame" x="0.0" y="0.0" width="25" height="22"/>
@@ -505,7 +504,7 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="wbJ-Ul-p7F" userLabel="BottomSV">
-                                                <rect key="frame" x="0.0" y="352" width="350" height="27"/>
+                                                <rect key="frame" x="0.0" y="396" width="350" height="27"/>
                                                 <subviews>
                                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nXm-oH-660">
                                                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="29.5"/>
@@ -608,7 +607,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="100" id="jQK-IE-nYc" customClass="LikeTableCell" customModule="酷玩瘋樂榜" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="100"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jQK-IE-nYc" id="71I-5B-UDg">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>

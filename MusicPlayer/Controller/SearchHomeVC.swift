@@ -27,7 +27,9 @@ class SearchHomeVC: UIViewController {
         checkNetwork()
         tableSet()
         searchSet()
-        setBackground(color1: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), color2: #colorLiteral(red: 0.7451151609, green: 0.7450172305, blue: 0.7536247373, alpha: 1), color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+        setBackgroundColor(color1: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),
+                      color2: #colorLiteral(red: 0.7451151609, green: 0.7450172305, blue: 0.7536247373, alpha: 1),
+                      color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
     }
     
     func requestData(){

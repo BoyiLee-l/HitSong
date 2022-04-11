@@ -43,7 +43,9 @@ class MusicVC: UIViewController {
         read()
         setPlayerContent()
         playMusic()
-        setBackground(color1: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), color2: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1), color3: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
+        setBackgroundColor(color1: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1),
+                      color2: #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1),
+                      color3: #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
         print(likeCollection)
         if likeCollection == false{
             likeBtn.setImage(UIImage(named: "whiteheart"), for: .normal)

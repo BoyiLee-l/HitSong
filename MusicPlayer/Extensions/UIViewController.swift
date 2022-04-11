@@ -10,20 +10,20 @@ import UIKit
 
 var spinner: UIActivityIndicatorView = {
        let activityView = UIActivityIndicatorView()
-       activityView.style = .gray
+       activityView.style = .medium
        return activityView
    }()
 
 extension UIViewController {
     
-    func setBackground(color1: UIColor, color2: UIColor, color3: UIColor){
+    func setBackgroundColor(color1: UIColor, color2: UIColor, color3: UIColor){
         let colour1 = color1.cgColor
         let colour2 = color2.cgColor
         let colour3 = color3.cgColor
         let gradient = CAGradientLayer()
         gradient.frame = view.frame
         gradient.colors = [colour3, colour2, colour1]
-        gradient.locations = [ 0.4, 0.8,0.9]
+        gradient.locations = [ 0.4, 0.9, 1]
         view.layer.insertSublayer(gradient, at: 0)
     }
     

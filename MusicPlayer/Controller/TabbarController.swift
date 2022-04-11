@@ -8,7 +8,6 @@
 
 import UIKit
 
-@available(iOS 12.0, *)
 class TabbarController: UITabBarController {
    
     override func viewDidLoad() {

@@ -18,7 +18,6 @@ enum DetailData {
     case 收藏清單
 }
 
-@available(iOS 12.0, *)
 class HomeVC: UIViewController {
     
     @IBOutlet weak var myCollection: UICollectionView!
@@ -39,7 +38,9 @@ class HomeVC: UIViewController {
         checkNetwork()
         setCollectionView()
         setupActivityView()
-        setBackground(color1: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), color2: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+        setBackgroundColor(color1: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1),
+                      color2: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1),
+                      color3: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
     }
 
     func setCollectionView() {
@@ -96,7 +97,6 @@ class HomeVC: UIViewController {
 }
 
 
-@available(iOS 12.0, *)
 extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
