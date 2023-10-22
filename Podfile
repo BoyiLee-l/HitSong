@@ -11,5 +11,5 @@ target 'MusicPlayer' do
   pod 'NVActivityIndicatorView'
   pod 'SnapKit'
   pod 'SwiftyJSON'
-  pod 'RealmSwift', '4.4.0'
+  pod 'RealmSwift'
 end
