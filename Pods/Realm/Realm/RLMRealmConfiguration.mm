@@ -128,8 +128,6 @@ NSString *RLMRealmPathForFile(NSString *fileName) {
     configuration->_migrationBlock = _migrationBlock;
     configuration->_shouldCompactOnLaunch = _shouldCompactOnLaunch;
     configuration->_customSchema = _customSchema;
-    configuration->_eventConfiguration = _eventConfiguration;
-    configuration->_migrationObjectClass = _migrationObjectClass;
     configuration->_initialSubscriptions = _initialSubscriptions;
     configuration->_rerunOnOpen = _rerunOnOpen;
     return configuration;
@@ -335,7 +333,9 @@ static bool isSync(realm::Realm::Config const& config) {
         if (_config.immutable()) {
             @throw RLMException(@"Cannot set `shouldCompactOnLaunch` when `readOnly` is set.");
         }
-        _config.should_compact_on_launch_function = shouldCompactOnLaunch;
+        _config.should_compact_on_launch_function = [=](size_t totalBytes, size_t usedBytes) {
+            return shouldCompactOnLaunch(totalBytes, usedBytes);
+        };
     }
     else {
         _config.should_compact_on_launch_function = nullptr;
@@ -345,14 +345,6 @@ static bool isSync(realm::Realm::Config const& config) {
 
 - (void)setCustomSchemaWithoutCopying:(RLMSchema *)schema {
     _customSchema = schema;
-}
-
-- (bool)disableAutomaticChangeNotifications {
-    return !_config.automatic_change_notifications;
-}
-
-- (void)setDisableAutomaticChangeNotifications:(bool)disableAutomaticChangeNotifications {
-    _config.automatic_change_notifications = !disableAutomaticChangeNotifications;
 }
 
 #if REALM_ENABLE_SYNC

@@ -253,8 +253,7 @@ SOFTWARE.
       of your accepting any such warranty or additional liability.
 
    END OF TERMS AND CONDITIONS
-
-
+   
 
 ## RealmSwift
 
@@ -434,8 +433,7 @@ SOFTWARE.
       of your accepting any such warranty or additional liability.
 
    END OF TERMS AND CONDITIONS
-
-
+   
 
 ## SnapKit
 

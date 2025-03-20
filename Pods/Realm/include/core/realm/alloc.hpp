@@ -73,6 +73,7 @@ private:
 };
 static_assert(std::is_trivially_copyable_v<MemRef>);
 
+
 /// The common interface for Realm allocators.
 ///
 /// A Realm allocator must associate a 'ref' to each allocated
@@ -280,7 +281,7 @@ protected:
     inline uint_fast64_t get_storage_version(uint64_t instance_version)
     {
         if (instance_version != m_instance_versioning_counter) {
-            throw StaleAccessor("Stale accessor version");
+            throw LogicError(LogicError::detached_accessor);
         }
         return m_storage_versioning_counter.load(std::memory_order_acquire);
     }
@@ -327,7 +328,7 @@ private:
     friend class Group;
     friend class WrappedAllocator;
     friend class Obj;
-    template <class>
+    template <class, class>
     friend class CollectionBaseImpl;
     friend class Dictionary;
 };
@@ -423,7 +424,7 @@ inline int_fast64_t from_ref(ref_type v) noexcept
 inline ref_type to_ref(int_fast64_t v) noexcept
 {
     // Check that v is divisible by 8 (64-bit aligned).
-    REALM_ASSERT_DEBUG_EX(v % 8 == 0, v);
+    REALM_ASSERT_DEBUG(v % 8 == 0);
 
     // C++11 standard, paragraph 4.7.2 [conv.integral]:
     // If the destination type is unsigned, the resulting value is the least unsigned integer congruent to the source
@@ -497,8 +498,7 @@ inline void MemRef::set_addr(char* addr)
 inline MemRef Allocator::alloc(size_t size)
 {
     if (m_is_read_only)
-        throw realm::LogicError(ErrorCodes::WrongTransactionState,
-                                "Trying to modify database while in read transaction");
+        throw realm::LogicError(realm::LogicError::wrong_transact_state);
     return do_alloc(size);
 }
 
@@ -509,8 +509,7 @@ inline MemRef Allocator::realloc_(ref_type ref, const char* addr, size_t old_siz
         REALM_TERMINATE("Allocator watch: Ref was reallocated");
 #endif
     if (m_is_read_only)
-        throw realm::LogicError(ErrorCodes::WrongTransactionState,
-                                "Trying to modify database while in read transaction");
+        throw realm::LogicError(realm::LogicError::wrong_transact_state);
     return do_realloc(ref, const_cast<char*>(addr), old_size, new_size);
 }
 
@@ -577,7 +576,7 @@ inline char* Allocator::translate_critical(RefTranslation* ref_translation_ptr, 
             return translate_less_critical(ref_translation_ptr, ref);
         }
     }
-    realm::util::terminate("Invalid ref translation entry", __FILE__, __LINE__, txl.cookie, 0x1234567890, ref, idx);
+    realm::util::terminate("Invalid ref translation entry", __FILE__, __LINE__, txl.cookie, 0x1234567890);
     return nullptr;
 }
 

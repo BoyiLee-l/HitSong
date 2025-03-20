@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#import <Realm/RLMConstants.h>
+#import <Foundation/Foundation.h>
 
 @class RLMObjectId;
 
@@ -44,7 +44,7 @@ typedef NS_ENUM(NSUInteger, RLMSyncSubscriptionState) {
     RLMSyncSubscriptionStateSuperseded
 };
 
-RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  `RLMSyncSubscription` is  used to define a Flexible Sync subscription obtained from querying a
@@ -117,37 +117,17 @@ RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
 - (void)write:(__attribute__((noescape)) void(^)(void))block __attribute__((unavailable("Renamed to -update")));
 
 /**
- Synchronously performs any transactions (add/remove/update) to the subscription set within the block. The `onComplete` block is executed after waiting for associated data to be downloaded from the server.
+ Synchronously performs any transactions (add/remove/update) to the subscription set within the block,
+ this will not wait for the server to acknowledge and see all the data associated with this collection of subscriptions,
+ and will return after committing the subscription transactions.
 
  @param block The block containing actions to perform to the subscription set.
- @param onComplete A block which is called upon synchronization of
-                   data from the server. The block will be passed `nil`
-                   if the update succeeded, and an error describing the problem
-                   otherwise.
+ @param onComplete The block called upon synchronization of subscriptions to the server. Otherwise
+                   an `Error`describing what went wrong will be returned by the block
  */
-- (void)update:(__attribute__((noescape)) void(^)(void))block
-    onComplete:(nullable void(^RLM_SWIFT_SENDABLE)(NSError *_Nullable))onComplete
-    __attribute__((swift_async(not_swift_private, 2)))
-    __attribute__((swift_attr("@_unsafeInheritExecutor")));
+- (void)update:(__attribute__((noescape)) void(^)(void))block onComplete:(void(^)(NSError * _Nullable))onComplete;
 /// :nodoc:
-- (void)write:(__attribute__((noescape)) void(^)(void))block
-   onComplete:(void(^)(NSError * _Nullable))onComplete __attribute__((unavailable("Renamed to -update:onComplete.")));
-
-/**
- Synchronously performs any transactions (add/remove/update) to the subscription set within the block. The `onComplete` block is executed after waiting for associated data to be downloaded from the server.
-
- @param block The block containing actions to perform to the subscription set.
- @param queue The serial queue to deliver notifications to.
- @param onComplete A block which is called upon synchronization of
-                   data from the server. The block will be passed `nil`
-                   if the update succeeded, and an error describing the problem
-                   otherwise.
- */
- - (void)update:(__attribute__((noescape)) void(^)(void))block
-          queue:(nullable dispatch_queue_t)queue
-     onComplete:(void(^)(NSError *))onComplete
-__attribute__((swift_attr("@_unsafeInheritExecutor")));
-
+- (void)write:(__attribute__((noescape)) void(^)(void))block onComplete:(void(^)(NSError * _Nullable))onComplete __attribute__((unavailable("Renamed to -update:onComplete.")));
 
 #pragma mark - Find subscription
 
@@ -311,15 +291,6 @@ __attribute__((swift_attr("@_unsafeInheritExecutor")));
 - (void)removeAllSubscriptions;
 
 /**
- Removes all subscriptions without a name from the subscription set.
-
- @warning This method may only be called during a write subscription block.
- @warning Removing all subscriptions will result in an error if no new subscription is added. Server should
-          acknowledge at least one subscription.
- */
- - (void)removeAllUnnamedSubscriptions;
-
-/**
  Removes all subscription with the specified class name.
 
  @param className The class name for the model class to be queried.
@@ -366,4 +337,4 @@ __attribute__((swift_attr("@_unsafeInheritExecutor")));
 
 @end
 
-RLM_HEADER_AUDIT_END(nullability, sendability)
+NS_ASSUME_NONNULL_END

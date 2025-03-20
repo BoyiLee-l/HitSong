@@ -16,7 +16,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#import <Realm/RLMConstants.h>
+#import <Foundation/Foundation.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, RLMUpdatePolicy) {
     RLMUpdatePolicyUpdateAll = 2,
 };
 
-RLM_HEADER_AUDIT_BEGIN(nullability)
+NS_ASSUME_NONNULL_BEGIN
 
 void RLMVerifyHasPrimaryKey(Class cls);
 
@@ -92,7 +92,7 @@ RLMObjectBase *RLMObjectFromObjLink(RLMRealm *realm,
 
 // Create accessors
 RLMObjectBase *RLMCreateObjectAccessor(RLMClassInfo& info, int64_t key) NS_RETURNS_RETAINED;
-RLMObjectBase *RLMCreateObjectAccessor(RLMClassInfo& info, const realm::Obj& obj) NS_RETURNS_RETAINED;
+RLMObjectBase *RLMCreateObjectAccessor(RLMClassInfo& info, realm::Obj&& obj) NS_RETURNS_RETAINED;
 #endif
 
-RLM_HEADER_AUDIT_END(nullability)
+NS_ASSUME_NONNULL_END

@@ -20,7 +20,7 @@
 
 #import <Realm/RLMConstants.h>
 
-RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
+NS_ASSUME_NONNULL_BEGIN
 
 typedef RLM_CLOSED_ENUM(NSUInteger, RLMSyncStopPolicy) {
     RLMSyncStopPolicyImmediately,
@@ -41,7 +41,8 @@ typedef RLM_CLOSED_ENUM(NSUInteger, RLMSyncStopPolicy) {
 
 // Internal-only APIs
 @property (nonatomic, readwrite) RLMSyncStopPolicy stopPolicy;
+@property (nonatomic, readonly) BOOL enableFlexibleSync;
 
 @end
 
-RLM_HEADER_AUDIT_END(nullability, sendability)
+NS_ASSUME_NONNULL_END

@@ -22,7 +22,7 @@
 
 @class RLMObjectBase;
 
-RLM_HEADER_AUDIT_BEGIN(nullability)
+NS_ASSUME_NONNULL_BEGIN
 
 BOOL RLMPropertyTypeIsComputed(RLMPropertyType propertyType);
 FOUNDATION_EXTERN void RLMValidateSwiftPropertyName(NSString *name);
@@ -136,4 +136,4 @@ static inline NSString *RLMTypeToString(RLMPropertyType type) {
                     optional:(BOOL)optional;
 @end
 
-RLM_HEADER_AUDIT_END(nullability)
+NS_ASSUME_NONNULL_END

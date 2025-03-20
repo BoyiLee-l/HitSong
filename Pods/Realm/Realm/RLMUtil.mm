@@ -22,7 +22,6 @@
 #import "RLMAccessor.hpp"
 #import "RLMDecimal128_Private.hpp"
 #import "RLMDictionary_Private.h"
-#import "RLMError_Private.hpp"
 #import "RLMObjectId_Private.hpp"
 #import "RLMObjectSchema_Private.hpp"
 #import "RLMObjectStore.h"
@@ -37,7 +36,15 @@
 #import "RLMValue.h"
 
 #import <realm/mixed.hpp>
+#import <realm/object-store/shared_realm.hpp>
+#import <realm/table_view.hpp>
 #import <realm/util/overload.hpp>
+
+#if REALM_ENABLE_SYNC
+#import "RLMSyncUtil.h"
+#import <realm/sync/client.hpp>
+#import <realm/object-store/sync/app.hpp>
+#endif
 
 #include <sys/sysctl.h>
 #include <sys/types.h>
@@ -66,7 +73,6 @@ static inline bool checkCollectionType(__unsafe_unretained id<RLMCollection> con
         && (type != RLMPropertyTypeObject || [collection.objectClassName isEqualToString:objectClassName]);
 }
 
-static id (*s_bridgeValue)(id);
 id<NSFastEnumeration> RLMAsFastEnumeration(__unsafe_unretained id obj) {
     if (!obj) {
         return nil;
@@ -74,8 +80,8 @@ id<NSFastEnumeration> RLMAsFastEnumeration(__unsafe_unretained id obj) {
     if ([obj conformsToProtocol:@protocol(NSFastEnumeration)]) {
         return obj;
     }
-    if (s_bridgeValue) {
-        id bridged = s_bridgeValue(obj);
+    if (RLMSwiftBridgeValue) {
+        id bridged = RLMSwiftBridgeValue(obj);
         if ([bridged conformsToProtocol:@protocol(NSFastEnumeration)]) {
             return bridged;
         }
@@ -83,15 +89,12 @@ id<NSFastEnumeration> RLMAsFastEnumeration(__unsafe_unretained id obj) {
     return nil;
 }
 
-void RLMSetSwiftBridgeCallback(id (*callback)(id)) {
-    s_bridgeValue = callback;
-}
-
+id (*RLMSwiftBridgeValue)(id);
 id RLMBridgeSwiftValue(__unsafe_unretained id value) {
-    if (!value || !s_bridgeValue) {
+    if (!value || !RLMSwiftBridgeValue) {
         return nil;
     }
-    return s_bridgeValue(value);
+    return RLMSwiftBridgeValue(value);
 }
 
 bool RLMIsSwiftObjectClass(Class cls) {
@@ -346,10 +349,147 @@ NSException *RLMException(std::exception const& exception) {
     return RLMException(@"%s", exception.what());
 }
 
-NSException *RLMException(realm::Exception const& exception) {
-    return RLMException(@(exception.what()),
-                        @{@"Error Code": @(exception.code()),
-                          @"Underlying": makeError(exception.to_status())});
+NSError *RLMMakeError(RLMError code, NSString *msg) {
+    return [NSError errorWithDomain:RLMErrorDomain
+                               code:code
+                           userInfo:@{NSLocalizedDescriptionKey: msg,
+                                      @"Error Code": @(code)}];
+}
+
+NSError *RLMMakeError(RLMError code, std::exception const& exception) {
+    return [NSError errorWithDomain:RLMErrorDomain
+                               code:code
+                           userInfo:@{NSLocalizedDescriptionKey: @(exception.what()),
+                                      @"Error Code": @(code)}];
+}
+
+NSError *RLMMakeError(RLMError code, const realm::util::File::AccessError& exception) {
+    return [NSError errorWithDomain:RLMErrorDomain
+                               code:code
+                           userInfo:@{NSLocalizedDescriptionKey: @(exception.what()),
+                                      NSFilePathErrorKey: @(exception.get_path().c_str()),
+                                      @"Error Code": @(code)}];
+}
+
+NSError *RLMMakeError(RLMError code, const realm::RealmFileException& exception) {
+    NSString *underlying = @(exception.underlying().c_str());
+    return [NSError errorWithDomain:RLMErrorDomain
+                               code:code
+                           userInfo:@{NSLocalizedDescriptionKey: @(exception.what()),
+                                      NSFilePathErrorKey: @(exception.path().c_str()),
+                                      @"Error Code": @(code),
+                                      @"Underlying": underlying.length == 0 ? @"n/a" : underlying}];
+}
+
+namespace {
+RLMAppError translateAppError(realm::app::ServiceErrorCode code) {
+    using ec = realm::app::ServiceErrorCode;
+    switch (code) {
+        case ec::account_name_in_use:           return RLMAppErrorAccountNameInUse;
+        case ec::api_key_already_exists:        return RLMAppErrorAPIKeyAlreadyExists;
+        case ec::auth_error:                    return RLMAppErrorAuthError;
+        case ec::auth_provider_not_found:       return RLMAppErrorAuthProviderNotFound;
+        case ec::domain_not_allowed:            return RLMAppErrorDomainNotAllowed;
+        case ec::execution_time_limit_exceeded: return RLMAppErrorExecutionTimeLimitExceeded;
+        case ec::function_execution_error:      return RLMAppErrorFunctionExecutionError;
+        case ec::function_invalid:              return RLMAppErrorFunctionInvalid;
+        case ec::function_not_found:            return RLMAppErrorFunctionNotFound;
+        case ec::function_syntax_error:         return RLMAppErrorFunctionSyntaxError;
+        case ec::invalid_email_password:        return RLMAppErrorInvalidPassword;
+        case ec::invalid_session:               return RLMAppErrorInvalidSession;
+        case ec::maintenance_in_progress:       return RLMAppErrorMaintenanceInProgress;
+        case ec::missing_parameter:             return RLMAppErrorMissingParameter;
+        case ec::mongodb_error:                 return RLMAppErrorMongoDBError;
+        case ec::not_callable:                  return RLMAppErrorNotCallable;
+        case ec::read_size_limit_exceeded:      return RLMAppErrorReadSizeLimitExceeded;
+        case ec::user_already_confirmed:        return RLMAppErrorUserAlreadyConfirmed;
+        case ec::user_app_domain_mismatch:      return RLMAppErrorUserAppDomainMismatch;
+        case ec::user_disabled:                 return RLMAppErrorUserDisabled;
+        case ec::user_not_found:                return RLMAppErrorUserNotFound;
+        case ec::value_already_exists:          return RLMAppErrorValueAlreadyExists;
+        case ec::value_duplicate_name:          return RLMAppErrorValueDuplicateName;
+        case ec::value_not_found:               return RLMAppErrorValueNotFound;
+
+        case ec::arguments_not_allowed:
+        case ec::bad_request:
+        case ec::invalid_parameter:
+            return RLMAppErrorBadRequest;
+
+        case ec::internal_server_error:
+        case ec::aws_error:
+        case ec::gcm_error:
+        case ec::http_error:
+        case ec::twilio_error:
+            return RLMAppErrorInternalServerError;
+
+        default:
+            return RLMAppErrorUnknown;
+    }
+}
+} // anonymous namespace
+
+NSError *RLMMakeError(std::system_error const& exception) {
+    auto code = exception.code();
+    NSInteger errorCode = code.value();
+    // core reports some posix error codes with a private category that it does not expose properly.
+    BOOL isGenericCategoryError = code.category() == std::generic_category()
+                               || strcmp(code.category().name(), "realm.basic_system") == 0;
+    NSString *errorDomain = isGenericCategoryError ? NSPOSIXErrorDomain : RLMUnknownSystemErrorDomain;
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    userInfo[NSLocalizedDescriptionKey] = @(exception.what());
+
+    // FIXME: remove these in v11
+    userInfo[@"Error Code"] = @(code.value());
+    userInfo[@"Category"] = @(code.category().name());
+
+#if REALM_ENABLE_SYNC
+    if (code.category() == realm::sync::client_error_category()) {
+        if (code.value() == static_cast<int>(realm::sync::Client::Error::connect_timeout)) {
+            errorDomain = NSPOSIXErrorDomain;
+            errorCode = ETIMEDOUT;
+        }
+        else {
+            errorDomain = RLMSyncErrorDomain;
+        }
+    }
+    else if (code.category() == realm::app::service_error_category()) {
+        errorDomain = RLMAppErrorDomain;
+        errorCode = translateAppError(static_cast<realm::app::ServiceErrorCode>(exception.code().value()));
+    }
+    else if (code.category() == realm::app::http_error_category()) {
+        errorDomain = RLMAppErrorDomain;
+        errorCode = RLMAppErrorHttpRequestFailed;
+        userInfo[RLMHTTPStatusCodeKey] = @(exception.code().value());
+    }
+#endif
+
+    return [NSError errorWithDomain:errorDomain code:errorCode userInfo:userInfo.copy];
+}
+
+NSError *RLMAppErrorToNSError(realm::app::AppError const& appError) {
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    userInfo[NSLocalizedDescriptionKey] = RLMStringViewToNSString(appError.message);
+    if (!appError.link_to_server_logs.empty()) {
+        userInfo[RLMServerLogURLKey] = RLMStringViewToNSString(appError.link_to_server_logs);
+    }
+    if (appError.http_status_code) {
+        userInfo[RLMHTTPStatusCodeKey] = @(*appError.http_status_code);
+    }
+
+    NSString *domain = RLMAppErrorDomain;
+    NSInteger code = RLMAppErrorUnknown;
+    if (appError.is_http_error()) {
+        code = RLMAppErrorHttpRequestFailed;
+    }
+    else if (appError.is_service_error()) {
+        auto errCode = realm::app::ServiceErrorCode(appError.error_code.value());
+        if (errCode == realm::app::ServiceErrorCode::none) {
+            return nil;
+        }
+        code = translateAppError(errCode);
+    }
+
+    return [[NSError alloc] initWithDomain:domain code:code userInfo:userInfo.copy];
 }
 
 void RLMSetErrorOrThrow(NSError *error, NSError **outError) {
@@ -357,7 +497,11 @@ void RLMSetErrorOrThrow(NSError *error, NSError **outError) {
         *outError = error;
     }
     else {
-        @throw RLMException(error.localizedDescription, @{NSUnderlyingErrorKey: error});
+        NSString *msg = error.localizedDescription;
+        if (error.userInfo[NSFilePathErrorKey]) {
+            msg = [NSString stringWithFormat:@"%@: %@", error.userInfo[NSFilePathErrorKey], error.localizedDescription];
+        }
+        @throw RLMException(msg, @{NSUnderlyingErrorKey: error});
     }
 }
 

@@ -6,10 +6,10 @@ target 'MusicPlayer' do
   use_frameworks!
 
   # Pods for MusicPlayer
-  pod 'Alamofire'
-  pod 'Kingfisher'
-  pod 'NVActivityIndicatorView'
-  pod 'SnapKit'
-  pod 'SwiftyJSON'
-  pod 'RealmSwift'
+  pod 'Alamofire', '~> 5.4'
+  pod 'Kingfisher', '~> 7.0'
+  pod 'NVActivityIndicatorView', '~> 5.1'
+  pod 'SnapKit', '~> 5.0.1'
+  pod 'SwiftyJSON', '~> 5.0.1'
+  pod 'RealmSwift', '10.33'
 end

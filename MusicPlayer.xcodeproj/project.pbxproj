@@ -3,10 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C8A4AE82D8C09660060456E /* TracksData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4AE72D8C09600060456E /* TracksData.swift */; };
+		2C8A4AEA2D8C098F0060456E /* Categories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4AE92D8C098E0060456E /* Categories.swift */; };
+		2C8A4AEC2D8C09B30060456E /* SearchData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4AEB2D8C09B20060456E /* SearchData.swift */; };
+		2C8A4AEE2D8C0A120060456E /* SpotifyAPIEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4AED2D8C0A0E0060456E /* SpotifyAPIEndpoints.swift */; };
 		A229506B51B1D4EDA988C47C /* Pods_MusicPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70BA06AE6CC9880006DD8827 /* Pods_MusicPlayer.framework */; };
 		CE3985DB254A6A1600F1FB72 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3985DA254A6A1600F1FB72 /* UIViewController.swift */; };
 		CE689FAC254FB3D400F619CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE689FAE254FB3D400F619CC /* InfoPlist.strings */; };
@@ -31,6 +35,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C8A4AE72D8C09600060456E /* TracksData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksData.swift; sourceTree = "<group>"; };
+		2C8A4AE92D8C098E0060456E /* Categories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Categories.swift; sourceTree = "<group>"; };
+		2C8A4AEB2D8C09B20060456E /* SearchData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchData.swift; sourceTree = "<group>"; };
+		2C8A4AED2D8C0A0E0060456E /* SpotifyAPIEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIEndpoints.swift; sourceTree = "<group>"; };
 		411631813E1BFE0263794A7A /* Pods-MusicPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MusicPlayer.debug.xcconfig"; path = "Target Support Files/Pods-MusicPlayer/Pods-MusicPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 		70BA06AE6CC9880006DD8827 /* Pods_MusicPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MusicPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE0F7A308A2074051AAF8394 /* Pods-MusicPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MusicPlayer.release.xcconfig"; path = "Target Support Files/Pods-MusicPlayer/Pods-MusicPlayer.release.xcconfig"; sourceTree = "<group>"; };
@@ -143,6 +151,9 @@
 		CEDD4B3424EBDB8800E4B629 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2C8A4AEB2D8C09B20060456E /* SearchData.swift */,
+				2C8A4AE92D8C098E0060456E /* Categories.swift */,
+				2C8A4AE72D8C09600060456E /* TracksData.swift */,
 				CEDD4B3524EBDB9B00E4B629 /* SpotifyData.swift */,
 			);
 			path = Model;
@@ -151,6 +162,7 @@
 		CEDD4B3B24ECCB3300E4B629 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				2C8A4AED2D8C0A0E0060456E /* SpotifyAPIEndpoints.swift */,
 				CEDD4B3224EBDB7D00E4B629 /* GetspotifyData.swift */,
 			);
 			path = Service;
@@ -325,13 +337,17 @@
 				CEDD4B2324EBDB5E00E4B629 /* HomeVC.swift in Sources */,
 				CE772A132626B8E300B35784 /* LikeTableCell.swift in Sources */,
 				CEDD4B3324EBDB7D00E4B629 /* GetspotifyData.swift in Sources */,
+				2C8A4AEA2D8C098F0060456E /* Categories.swift in Sources */,
 				CEDD4B1F24EBDB5E00E4B629 /* AppDelegate.swift in Sources */,
 				CE772A012625653B00B35784 /* PlayListRealm.swift in Sources */,
 				CEDD4B2124EBDB5E00E4B629 /* SceneDelegate.swift in Sources */,
 				CE923D0324EFB7A200D4DE00 /* MusicVC.swift in Sources */,
 				CE3985DB254A6A1600F1FB72 /* UIViewController.swift in Sources */,
 				CEDD4B4824EE45F900E4B629 /* TracksVC.swift in Sources */,
+				2C8A4AEE2D8C0A120060456E /* SpotifyAPIEndpoints.swift in Sources */,
+				2C8A4AE82D8C09660060456E /* TracksData.swift in Sources */,
 				CEDD4B4224EE200600E4B629 /* HomeCollectionCell.swift in Sources */,
+				2C8A4AEC2D8C09B30060456E /* SearchData.swift in Sources */,
 				CE9F09E824F4D764006B46D2 /* SearchHomeCell.swift in Sources */,
 				CEDD4B3624EBDB9B00E4B629 /* SpotifyData.swift in Sources */,
 				CE7729822624343E00B35784 /* LikeVC.swift in Sources */,
@@ -497,8 +513,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = " 1";
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = /Users/duncanli/Desktop/sideProject/HitSong/MusicPlayer/SupportingFiles/Info.plist;
+				DEVELOPMENT_TEAM = FKN8KH3Y77;
+				INFOPLIST_FILE = /Users/duncanli/Desktop/Swift_Project/HitSong/MusicPlayer/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -519,8 +535,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = " 1";
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = /Users/duncanli/Desktop/sideProject/HitSong/MusicPlayer/SupportingFiles/Info.plist;
+				DEVELOPMENT_TEAM = FKN8KH3Y77;
+				INFOPLIST_FILE = /Users/duncanli/Desktop/Swift_Project/HitSong/MusicPlayer/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

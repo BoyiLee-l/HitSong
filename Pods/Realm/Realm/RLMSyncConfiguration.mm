@@ -20,7 +20,6 @@
 
 #import "RLMApp_Private.hpp"
 #import "RLMBSON_Private.hpp"
-#import "RLMError_Private.hpp"
 #import "RLMRealm_Private.hpp"
 #import "RLMRealmConfiguration_Private.h"
 #import "RLMRealmConfiguration_Private.hpp"
@@ -32,7 +31,6 @@
 #import "RLMUser_Private.hpp"
 #import "RLMUtil.hpp"
 
-#import <realm/object-store/impl/realm_coordinator.hpp>
 #import <realm/object-store/sync/sync_manager.hpp>
 #import <realm/object-store/sync/sync_session.hpp>
 #import <realm/object-store/thread_safe_reference.hpp>
@@ -44,18 +42,47 @@ using namespace realm;
 namespace {
 using ProtocolError = realm::sync::ProtocolError;
 
+RLMSyncError errorKindForSyncError(SyncError error) {
+    if (error.is_client_reset_requested())
+        return RLMSyncErrorClientResetError;
+    if (error.error_code.category() == realm::sync::protocol_error_category()) {
+        switch (static_cast<ProtocolError>(error.error_code.value())) {
+            case ProtocolError::permission_denied:
+                return RLMSyncErrorPermissionDeniedError;
+            case ProtocolError::bad_authentication:
+                return RLMSyncErrorClientUserError;
+            case ProtocolError::compensating_write:
+                return RLMSyncErrorWriteRejected;
+            default:
+                break;
+        }
+    }
+    if (error.is_session_level_protocol_error())
+        return RLMSyncErrorClientSessionError;
+    return RLMSyncErrorClientInternalError;
+}
+
 struct CallbackSchema {
     bool dynamic;
+    std::string path;
     RLMSchema *customSchema;
+
+    RLMSchema *getSchema(Realm& realm) {
+        if (dynamic) {
+            return [RLMSchema dynamicSchemaFromObjectStoreSchema:realm.schema()];
+        }
+        if (auto cached = RLMGetAnyCachedRealmForPath(path)) {
+            return cached.schema;
+        }
+        return customSchema ?: RLMSchema.sharedSchema;
+    }
 };
 
 struct BeforeClientResetWrapper : CallbackSchema {
     RLMClientResetBeforeBlock block;
     void operator()(std::shared_ptr<Realm> local) {
         @autoreleasepool {
-            if (local->schema_version() != RLMNotVersioned) {
-                block([RLMRealm realmWithSharedRealm:local schema:customSchema dynamic:dynamic freeze:true]);
-            }
+            block([RLMRealm realmWithSharedRealm:local schema:getSchema(*local) dynamic:false]);
         }
     }
 };
@@ -64,18 +91,14 @@ struct AfterClientResetWrapper : CallbackSchema {
     RLMClientResetAfterBlock block;
     void operator()(std::shared_ptr<Realm> local, ThreadSafeReference remote, bool) {
         @autoreleasepool {
-            if (local->schema_version() == RLMNotVersioned) {
-                return;
-            }
-
+            RLMSchema *schema = getSchema(*local);
             RLMRealm *localRealm = [RLMRealm realmWithSharedRealm:local
-                                                           schema:customSchema
-                                                          dynamic:dynamic
-                                                           freeze:true];
+                                                           schema:schema
+                                                          dynamic:false];
+
             RLMRealm *remoteRealm = [RLMRealm realmWithSharedRealm:Realm::get_shared_realm(std::move(remote))
-                                                            schema:customSchema
-                                                           dynamic:dynamic
-                                                            freeze:false];
+                                                            schema:schema
+                                                           dynamic:false];
             block(localRealm, remoteRealm);
         }
     }
@@ -151,7 +174,6 @@ struct AfterClientResetWrapper : CallbackSchema {
     } else if (self.clientResetMode == RLMClientResetModeManual) {
         @throw RLMException(@"RLMClientResetBeforeBlock reset notifications are not supported in Manual mode. Use RLMSyncConfiguration.manualClientResetHandler or RLMSyncManager.ErrorHandler");
     } else {
-        _config->freeze_before_reset_realm = false;
         _config->notify_before_client_reset = BeforeClientResetWrapper{.block = beforeClientReset};
     }
 }
@@ -194,11 +216,13 @@ void RLMSetConfigInfoForClientResetCallbacks(realm::SyncConfig& syncConfig, RLMR
     if (syncConfig.notify_before_client_reset) {
         auto before = syncConfig.notify_before_client_reset.target<BeforeClientResetWrapper>();
         before->dynamic = config.dynamic;
+        before->path = config.path;
         before->customSchema = config.customSchema;
     }
     if (syncConfig.notify_after_client_reset) {
         auto after = syncConfig.notify_after_client_reset.target<AfterClientResetWrapper>();
         after->dynamic = config.dynamic;
+        after->path = config.path;
         after->customSchema = config.customSchema;
     }
 }
@@ -218,6 +242,51 @@ void RLMSetConfigInfoForClientResetCallbacks(realm::SyncConfig& syncConfig, RLMR
     _config->cancel_waits_on_nonfatal_error = cancelAsyncOpenOnNonFatalErrors;
 }
 
+- (BOOL)enableFlexibleSync {
+    return _config->flx_sync_requested;
+}
+
+NSError *RLMTranslateSyncError(SyncError error) {
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+
+    for (auto& pair : error.user_info) {
+        if (pair.first == realm::SyncError::c_original_file_path_key) {
+            userInfo[kRLMSyncErrorActionTokenKey] =
+                [[RLMSyncErrorActionToken alloc] initWithOriginalPath:pair.second];
+        }
+        else if (pair.first == realm::SyncError::c_recovery_file_path_key) {
+            userInfo[kRLMSyncPathOfRealmBackupCopyKey] = @(pair.second.c_str());
+        }
+    }
+
+    // Note that certain types of errors are 'interactive'; users have several options
+    // as to how to proceed after the error is reported.
+    auto errorCode = errorKindForSyncError(error);
+    switch (errorCode) {
+        case RLMSyncErrorClientResetError:
+        case RLMSyncErrorPermissionDeniedError:
+        case RLMSyncErrorUnderlyingAuthError:
+        case RLMSyncErrorWriteRejected:
+            break;
+        case RLMSyncErrorClientSessionError:
+        case RLMSyncErrorClientUserError:
+        case RLMSyncErrorClientInternalError:
+            if (!error.is_fatal) {
+                return nil;
+            }
+            break;
+    }
+    userInfo[NSLocalizedDescriptionKey] = RLMStringViewToNSString(error.simple_message);
+    userInfo[kRLMSyncErrorStatusCodeKey] = @(error.error_code.value());
+    if (!error.logURL.empty()) {
+        userInfo[RLMServerLogURLKey] = RLMStringViewToNSString(error.logURL);
+    }
+
+    return [NSError errorWithDomain:RLMSyncErrorDomain
+                               code:errorCode
+                           userInfo:[userInfo copy]];
+}
+
 - (void)assignConfigErrorHandler:(RLMUser *)user {
     RLMSyncManager *manager = [user.app syncManager];
     __weak RLMSyncManager *weakManager = manager;
@@ -235,7 +304,7 @@ void RLMSetConfigInfoForClientResetCallbacks(realm::SyncConfig& syncConfig, RLMR
         if (!errorHandler) {
             return;
         }
-        NSError *nsError = makeError(std::move(error));
+        NSError *nsError = RLMTranslateSyncError(std::move(error));
         if (!nsError) {
             return;
         }
@@ -252,7 +321,17 @@ void RLMSetConfigInfoForClientResetCallbacks(realm::SyncConfig& syncConfig, RLMR
 static void setDefaults(SyncConfig& config, RLMUser *user) {
     config.client_resync_mode = ClientResyncMode::Recover;
     config.stop_policy = SyncSessionStopPolicy::AfterChangesUploaded;
-    [user.app.syncManager populateConfig:config];
+
+    RLMSyncManager *manager = [user.app syncManager];
+
+    if (NSString *authorizationHeaderName = manager.authorizationHeaderName) {
+        config.authorization_header_name.emplace(authorizationHeaderName.UTF8String);
+    }
+    if (NSDictionary<NSString *, NSString *> *customRequestHeaders = manager.customRequestHeaders) {
+        for (NSString *key in customRequestHeaders) {
+            config.custom_http_headers.emplace(key.UTF8String, customRequestHeaders[key].UTF8String);
+        }
+    }
 }
 
 - (instancetype)initWithUser:(RLMUser *)user

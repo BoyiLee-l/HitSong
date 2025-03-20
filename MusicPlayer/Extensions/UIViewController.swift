@@ -34,13 +34,17 @@ extension UIViewController {
     }
     
     func startLoading(){
-        spinner.startAnimating()
-        spinner.isHidden = false
+        DispatchQueue.main.async {
+            spinner.startAnimating()
+            spinner.isHidden = false
+        }
     }
     
     func stopLoading(){
-        spinner.stopAnimating()
-        spinner.isHidden = true
+        DispatchQueue.main.async {
+            spinner.stopAnimating()
+            spinner.isHidden = true
+        }
     }
     
     func alert(title: String, message: String){

@@ -16,11 +16,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#import <Realm/RLMConstants.h>
+#import <Foundation/Foundation.h>
+
 #import <Realm/RLMObjectBase.h>
 #import <Realm/RLMThreadSafeReference.h>
 
-RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
+NS_ASSUME_NONNULL_BEGIN
 
 @class RLMNotificationToken;
 @class RLMObjectSchema;
@@ -808,4 +809,4 @@ __attribute__((deprecated("RLM_ARRAY_TYPE has been deprecated. Use RLM_COLLECTIO
 @protocol RLM_OBJECT_SUBCLASS <NSObject>   \
 @end
 
-RLM_HEADER_AUDIT_END(nullability, sendability)
+NS_ASSUME_NONNULL_END

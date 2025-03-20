@@ -33,9 +33,8 @@ class SearchHomeVC: UIViewController {
     }
     
     func requestData(){
-        print("Categories:\(categoriesURL)")
-        //startLoading()
-        results.getCategories(baseurl: categoriesURL) { (data) in
+        startLoading()
+        results.getCategories(baseurl: SpotifyAPIEndpoints.categoriesURL) { (data) in
             self.spotifyData = data
             //self.searchFilter()
             self.navigationItem.title = "搜尋"
@@ -151,13 +150,12 @@ extension SearchHomeVC: UITableViewDelegate,UITableViewDataSource{
     }
 }
 
-@available(iOS 12.0, *)
+
 extension SearchHomeVC: UISearchBarDelegate{
-    
     // 點擊searchBar的搜尋按鈕時
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        keyWord  = searchController.searchBar.text ?? ""
-        guard let encodeUrlString = keyWord.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
+        SpotifyAPIParameters.keyWord  = searchController.searchBar.text ?? ""
+        guard let encodeUrlString = SpotifyAPIParameters.keyWord.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
             return
         }
         print("searchURL:\(gatSearchURl(value: encodeUrlString))")
@@ -180,7 +178,6 @@ extension SearchHomeVC: UISearchBarDelegate{
     }
 }
 
-@available(iOS 12.0, *)
 extension SearchHomeVC: UISearchResultsUpdating{
     func updateSearchResults(for searchController: UISearchController) {
         if self.searchController.searchBar.text == "" {

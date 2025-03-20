@@ -18,6 +18,7 @@
 
 #import "RLMSyncConfiguration_Private.h"
 
+#import <functional>
 #import <memory>
 
 namespace realm {
@@ -27,9 +28,10 @@ struct SyncError;
 using SyncSessionErrorHandler = void(std::shared_ptr<SyncSession>, SyncError);
 }
 
-RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
+NS_ASSUME_NONNULL_BEGIN
 
 @interface RLMSyncConfiguration ()
+
 - (instancetype)initWithRawConfig:(realm::SyncConfig)config path:(std::string const&)path;
 - (realm::SyncConfig&)rawConfiguration;
 
@@ -37,7 +39,10 @@ RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
 // can access schema, dynamic, and path properties.
 void RLMSetConfigInfoForClientResetCallbacks(realm::SyncConfig& syncConfig, RLMRealmConfiguration *config);
 
-@property (nonatomic, direct) std::string path;
+@property (nonatomic) std::string path;
+
 @end
 
-RLM_HEADER_AUDIT_END(nullability, sendability)
+NSError *_Nullable RLMTranslateSyncError(realm::SyncError);
+
+NS_ASSUME_NONNULL_END

@@ -56,10 +56,10 @@ class HomeVC: UIViewController {
     }
     
     func requestData(){
-        //startLoading()
+        startLoading()
         switch detailData{
         case.熱門清單:
-            results.getSpotifyData(baseurl: baseURL) { (data) in
+            results.getSpotifyData(baseurl: SpotifyAPIEndpoints.featuredPlaylistsURL) { (data) in
                 self.spotifyData = data
                 self.navigationItem.title = "熱門播放清單"
                 self.stopLoading()
@@ -100,13 +100,12 @@ class HomeVC: UIViewController {
 extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //        guard let data =  spotifyData?.playlists?.items  else {fatalError()}
-        return spotifyData?.playlists?.items?.count ?? 0
+        return spotifyData?.items?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HomeCollectionCell
-        guard let data =  spotifyData?.playlists?.items  else {fatalError()}
+        guard let data =  spotifyData?.items  else {fatalError()}
         let urls = data[indexPath.row].images?[0].url
         cell.myImage?.kf.setImage(with: URL(string: urls ?? ""))
         return cell
@@ -116,7 +115,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource{
         
         if let next = self.storyboard?.instantiateViewController(withIdentifier: "TracksVC") as? TracksVC {
             //傳送data網址
-            next.urls = String(spotifyData?.playlists?.items?[indexPath.row].tracks?.href ?? "")
+            next.urls = String(spotifyData?.items?[indexPath.row].tracks?.href ?? "")
             //跳頁
             self.navigationController?.pushViewController(next, animated: true)
         }

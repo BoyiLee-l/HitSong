@@ -26,7 +26,7 @@
 @class RLMUser;
 @protocol RLMBSON;
 
-RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
+NS_ASSUME_NONNULL_BEGIN
 
 /**  Determines file behavior during a client reset.
 
@@ -120,7 +120,6 @@ typedef NS_ENUM(NSUInteger, RLMClientResetMode) {
  A block type used to report before a client reset will occur.
  The `beforeFrozen` is a frozen copy of the local state prior to client reset.
  */
-RLM_SWIFT_SENDABLE // invoked on a background thread
 typedef void(^RLMClientResetBeforeBlock)(RLMRealm * _Nonnull beforeFrozen);
 
 /**
@@ -128,7 +127,6 @@ typedef void(^RLMClientResetBeforeBlock)(RLMRealm * _Nonnull beforeFrozen);
  The `beforeFrozen` argument is a frozen copy of the local state prior to client reset.
  The `after` argument contains the local database state after the client reset occurred.
  */
-RLM_SWIFT_SENDABLE // invoked on a backgroun thread
 typedef void(^RLMClientResetAfterBlock)(RLMRealm * _Nonnull beforeFrozen, RLMRealm * _Nonnull after);
 
 /**
@@ -181,7 +179,7 @@ typedef void(^RLMClientResetAfterBlock)(RLMRealm * _Nonnull beforeFrozen, RLMRea
  
  By default, if a nonfatal connection error such as a connection timing out occurs, any currently pending asyncOpen operations will ignore the error and continue to retry until it succeeds. If this is set to true, the open will instead fail and report the error.
  
- NEXT-MAJOR: This should be true by default.
+ FIXME: This should probably be true by default in the next major version.
  */
 @property (nonatomic) bool cancelAsyncOpenOnNonFatalErrors;
 
@@ -193,4 +191,4 @@ typedef void(^RLMClientResetAfterBlock)(RLMRealm * _Nonnull beforeFrozen, RLMRea
 
 @end
 
-RLM_HEADER_AUDIT_END(nullability, sendability)
+NS_ASSUME_NONNULL_END

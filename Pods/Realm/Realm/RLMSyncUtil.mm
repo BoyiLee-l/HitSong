@@ -20,8 +20,16 @@
 
 #import "RLMUser_Private.hpp"
 
+NSString *const RLMSyncErrorDomain = @"io.realm.sync";
+NSString *const RLMAppErrorDomain = @"io.realm.app";
+
+NSString *const RLMFlexibleSyncErrorDomain = @"io.realm.sync.flx";
+
 NSString *const kRLMSyncPathOfRealmBackupCopyKey            = @"recovered_realm_location_path";
 NSString *const kRLMSyncErrorActionTokenKey                 = @"error_action_token";
+
+NSString *const kRLMSyncErrorStatusCodeKey      = @"statusCode";
+NSString *const kRLMSyncUnderlyingErrorKey      = @"underlying_error";
 
 #pragma mark - C++ APIs
 
@@ -51,4 +59,10 @@ RLMSyncStopPolicy translateStopPolicy(SyncSessionStopPolicy stopPolicy) {
 CocoaSyncUserContext& context_for(const std::shared_ptr<realm::SyncUser>& user)
 {
     return *std::static_pointer_cast<CocoaSyncUserContext>(user->binding_context());
+}
+
+NSError *make_sync_error(std::error_code error) {
+    return [NSError errorWithDomain:RLMSyncErrorDomain
+                               code:error.value()
+                           userInfo:@{NSLocalizedDescriptionKey: @(error.message().c_str())}];
 }
