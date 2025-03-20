@@ -12,8 +12,9 @@ class TracksVC: UIViewController {
     
     @IBOutlet weak var myTableView: UITableView!
     var urls = ""
+    var musicId = ""
     var results = GetspotifyData()
-    var musucData: [Item2] = []
+    var musucData: [PlaylistTrackItem] = []
 
 
     override func viewDidLoad() {
@@ -34,7 +35,7 @@ class TracksVC: UIViewController {
     }
     
     func requestData(){
-        print("TrackVCURL:\(urls)")
+        print("TrackVCURL:\(SpotifyAPIEndpoints.trackURL(for: musicId))")
         startLoading()
         results.getTracksData(baseurl: urls) { (data) in
             guard let newData = data.items else { return }
@@ -71,15 +72,6 @@ extension TracksVC: UITableViewDelegate, UITableViewDataSource{
         next.songIndex = row
         self.present(next, animated: true, completion: nil)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "detail"{
-//            let next = segue.destination as! MusicVC
-//            guard let row = myTableView.indexPathForSelectedRow?.row else { return  }
-//            next.musucData = self.musucData
-//            next.songIndex = row
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120

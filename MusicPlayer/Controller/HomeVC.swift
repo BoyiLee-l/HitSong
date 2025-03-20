@@ -22,7 +22,7 @@ class HomeVC: UIViewController {
     
     @IBOutlet weak var myCollection: UICollectionView!
     
-    var hrefURl = ""
+    var hrefURL = ""
     var titleName = ""
     var detailData: DetailData = .熱門清單
     
@@ -34,7 +34,7 @@ class HomeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(hrefURl)
+        print(hrefURL)
         checkNetwork()
         setCollectionView()
         setupActivityView()
@@ -47,11 +47,20 @@ class HomeVC: UIViewController {
         myCollection.delegate = self
         myCollection.dataSource = self
         myCollection.backgroundColor = .clear
+
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        let width = UIScreen.main.bounds.width / 2-6
-        layout.itemSize = CGSize(width: width, height: width)
+        
+        // 設定 section 的邊距與 cell 之間的間距
+        let sectionInset: CGFloat = 10  // 左右邊距
+        let interItemSpacing: CGFloat = 10  // 兩個 cell 之間的間距
+        layout.sectionInset = UIEdgeInsets(top: 0, left: sectionInset, bottom: 0, right: sectionInset)
+        layout.minimumInteritemSpacing = interItemSpacing
+        layout.minimumLineSpacing = interItemSpacing
+        
+        // 計算每個 cell 的寬度 = (螢幕寬度 - 左右邊距 - cell 之間的間距) / 2
+        let itemWidth = (UIScreen.main.bounds.width - 2 * sectionInset - interItemSpacing) / 2
+        layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
+        
         myCollection.collectionViewLayout = layout
     }
     
@@ -66,7 +75,7 @@ class HomeVC: UIViewController {
                 self.myCollection.reloadData()
             }
         case .他類清單:
-            results.getSpotifyData(baseurl: hrefURl) { (data) in
+            results.getSpotifyData(baseurl: hrefURL) { (data) in
                 self.spotifyData = data
                 self.navigationItem.title = "\(self.titleName)"
                 self.stopLoading()
@@ -78,7 +87,9 @@ class HomeVC: UIViewController {
     }
     
     func checkNetwork(){
-        monitor.pathUpdateHandler = { path in
+        monitor.pathUpdateHandler = { [weak self] path in
+            guard let self = self else { return }
+            
             if path.status == .satisfied {
                 print("connected")
                 self.requestData()

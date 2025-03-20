@@ -10,7 +10,7 @@ import Foundation
 // MARK: - TracksData
 struct TracksData: Codable {
     let href: String?
-    let items: [Item2]?
+    let items: [PlaylistTrackItem]?
     let limit: Int?
     let next: String?
     let offset: Int?
@@ -18,7 +18,7 @@ struct TracksData: Codable {
     let total: Int?
 }
 
-struct Item2: Codable {
+struct PlaylistTrackItem: Codable {
     let addedAt: String?
     let isLocal: Bool?
     let primaryColor: String?

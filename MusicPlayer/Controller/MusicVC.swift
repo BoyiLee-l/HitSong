@@ -20,7 +20,7 @@ class MusicVC: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var likeBtn: UIButton!
     
-    var musucData = [Item2]()
+    var musucData = [PlaylistTrackItem]()
     var searchData = [SearchItem]()
     //收藏使用
     var likeData = [UserInfo]()

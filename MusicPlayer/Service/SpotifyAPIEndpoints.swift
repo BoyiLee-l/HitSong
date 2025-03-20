@@ -14,6 +14,11 @@ struct SpotifyAPIEndpoints {
     
     /// Spotify 類別清單的 URL，返回 50 個分類項目，從第一筆開始（offset=0）
     static let categoriesURL = "https://api.spotify.com/v1/browse/categories?offset=0&limit=50"
+    
+    /// 根據曲目 id 產生取得曲目資訊的 URL
+    static func trackURL(for id: String) -> String {
+        return "https://api.spotify.com/v1/tracks/\(id)"
+    }
 }
 
 struct SpotifyAPIParameters {

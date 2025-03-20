@@ -138,7 +138,7 @@ extension SearchHomeVC: UITableViewDelegate,UITableViewDataSource{
             guard let data = spotifyData?.categories?.items[indexPath.row] else{ fatalError() }
             print("id:\(data.id)")
             let id = "\(data.id)"
-            next.hrefURl = "https://api.spotify.com/v1/browse/categories/\(id)/playlists"
+            next.hrefURL = "https://api.spotify.com/v1/browse/categories/\(id)/playlists"
             next.titleName = "\(data.name)"
             next.detailData = .他類清單
             self.navigationController?.pushViewController(next, animated: true)

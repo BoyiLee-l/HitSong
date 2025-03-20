@@ -59,13 +59,12 @@ class GetspotifyData: UIViewController {
                 .responseData { dataResponse in
                     switch dataResponse.result {
                     case .success(let data):
-                        // 印出回傳的 JSON 資料
-                        if let jsonString = String(data: data, encoding: .utf8) {
-                            print("JSON response:\n\(jsonString)")
-                        } else {
-                            print("無法轉換 data 為 JSON 字串")
-                        }
-                        
+//                        // 印出回傳的 JSON 資料
+//                        if let jsonString = String(data: data, encoding: .utf8) {
+//                            print("JSON response:\n\(jsonString)")
+//                        } else {
+//                            print("無法轉換 data 為 JSON 字串")
+//                        }
                         do {
                             let playlistsData = try JSONDecoder().decode(PlaylistsData.self, from: data)
                             print("Playlists Data: \(playlistsData)")
@@ -81,36 +80,35 @@ class GetspotifyData: UIViewController {
     }
     
     //MARK: -TracksData
-    func getTracksData(baseurl: String, completion: @escaping(TracksData) ->Void){
-        //refresh_token
-        let parameters = "grant_type=refresh_token&refresh_token=AQDldCO_XnSNDaUVNpaquIlbVwTEIDys0V5pg7E2JVPYjdPKjlcatYbvnMlvQO473lmkR4vJAifiOV2wTFuBtX03E7ekv35BHyYXcG08aA4M0ruxB6hW7xklduA3mJ26YUI"
-        let postData =  parameters.data(using: .utf8)
-        if let url = URL(string: "https://accounts.spotify.com/api/token"){
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            //Client ID:你的Client Secret
-            request.addValue("Basic MGJlNzEyYTliZWMzNDU1MTg4ODFlMzI4NWY1NmEwMzk6ZTYwYWFjZjcwODEzNDk0MGFkYzIxZjVjY2Y3NzkzNTI=", forHTTPHeaderField: "Authorization")
-            request.httpBody = postData
+    func getTracksData(baseurl: String, completion: @escaping (TracksData) -> Void) {
+        fetchAccessToken { accessToken in
+            guard let token = accessToken else {
+                print("Error: 無法取得 access token")
+                return
+            }
             
+            let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
             
-            URLSession.shared.dataTask(with: request) { (data, response, error) in
-                let json = try! JSON(data: data!)
-                let token = json["access_token"].stringValue
-                let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-                
-                AF.request(baseurl, headers: headers).responseJSON { response in
-                    
-                    if let data = response.data {
-                        do {
-                            let dataList = try JSONDecoder().decode(TracksData.self, from: data)
-                            completion(dataList)
-                            //print(dataList)
-                        } catch {
-                            print(error.localizedDescription)
-                        }
+            AF.request(baseurl, headers: headers).responseData { response in
+                switch response.result {
+                case .success(let data):
+                    // 印出回傳的 JSON 資料
+                    if let jsonString = String(data: data, encoding: .utf8) {
+                        print("JSON response:\n\(jsonString)")
+                    } else {
+                        print("無法轉換 data 為 JSON 字串")
                     }
+                    do {
+                        let tracksData = try JSONDecoder().decode(TracksData.self, from: data)
+//                        print("成功取得 Tracks Data: \(tracksData)")
+                        completion(tracksData)
+                    } catch {
+                        print("Error decoding TracksData: \(error.localizedDescription)")
+                    }
+                case .failure(let error):
+                    print("Error fetching tracks data: \(error.localizedDescription)")
                 }
-            }.resume()
+            }
         }
     }
     
